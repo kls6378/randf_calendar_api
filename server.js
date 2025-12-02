@@ -1,14 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const pool = require("./database");
 const bcrypt = require("bcrypt");
+const helmet = require('helmet');
 
 const app = express();
 const PORT = process.env.PORT;
-const SECRET_KEY = "secret-key";
+const SECRET_KEY = process.env.JWT_SECRET;
 const saltRounds = 10; // bcrypt 암호화 복잡도 (보통 10 사용)
 // ID 유효성 검사 함수 (영문 대소문자 + 숫자만 허용)
 // ^ : 시작
@@ -17,7 +17,7 @@ const saltRounds = 10; // bcrypt 암호화 복잡도 (보통 10 사용)
 // $ : 끝
 const isValidId = (id) => /^[a-zA-Z0-9]+$/.test(id);
 
-app.use(cors());
+app.use(helmet());
 app.use(express.json());
 
 // ==========================================
