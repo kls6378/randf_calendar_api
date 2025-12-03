@@ -20,9 +20,7 @@ const isValidId = (id) => /^[a-zA-Z0-9]+$/.test(id);
 app.use(helmet());
 app.use(express.json());
 
-// ==========================================
 // 인증 미들웨어
-// ==========================================
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -36,9 +34,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// ==========================================
 // 1. 인증 & 유저 API
-// ==========================================
 
 // ID 중복 체크
 app.get("/api/users/check-id", async (req, res) => {
@@ -159,9 +155,7 @@ app.patch("/api/users/me", authenticateToken, async (req, res) => {
   }
 });
 
-// ==========================================
-// 2. 캘린더 일정 API (Prefix: /api)
-// ==========================================
+// 2. 캘린더 일정 API
 
 // [헬퍼 함수] DB 행(snake_case)을 프론트엔드 객체(camelCase)로 변환
 const rowToSchedule = (row) => {
@@ -427,9 +421,7 @@ app.delete("/api/schedules/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// ==========================================
-// 3. 그룹 API (Prefix: /api)
-// ==========================================
+// 3. 그룹 API
 
 // 내 그룹 목록
 app.get("/api/groups", authenticateToken, async (req, res) => {
@@ -675,9 +667,7 @@ app.delete("/api/groups/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// ==========================================
 // 4. 멤버 관리 API
-// ==========================================
 
 // 멤버 목록 조회
 app.get("/api/groups/:id/members", authenticateToken, async (req, res) => {
@@ -738,17 +728,6 @@ app.delete(
     }
   }
 );
-
-// ==========================================
-// 배포용 설정 (React 정적 파일 서빙)
-// ==========================================
-
-// app.use(express.static(path.join(__dirname, '../randf_calendar_pwa/build')));
-
-// // API 요청이 아닌 모든 요청은 리액트 index.html로
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../randf_calendar_pwa/build/index.html'));
-// });
 
 app.listen(PORT, () => {
   console.log(`서버가 http://localhost:${PORT} 에서 실행 중입니다!`);
